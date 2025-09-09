@@ -1,0 +1,46 @@
+/* frontend/src/components/VitalsDisplay.css */
+
+.vitals-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* Creates a 3-column grid */
+  gap: 16px; /* Space between the cards */
+  padding: 16px;
+}
+
+.vital-card {
+  background-color: #2a2a2e; /* Dark card background */
+  border-radius: 8px;
+  padding: 16px;
+  text-align: center;
+  border: 1px solid #444;
+}
+
+.vital-label {
+  font-size: 1em;
+  color: #aaa;
+  margin-bottom: 8px;
+  /* New styles for icon alignment */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px; /* Space between icon and text */
+}
+
+.vital-value {
+  font-size: 2.2em;
+  font-weight: bold;
+  color: #fff;
+}
+
+.vital-unit {
+  font-size: 0.5em;
+  font-weight: normal;
+  color: #ccc;
+  margin-left: 4px;
+}
+
+.loading-text {
+    padding: 40px;
+    font-size: 1.2em;
+    color: #888;
+}

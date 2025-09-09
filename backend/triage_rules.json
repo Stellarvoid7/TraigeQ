@@ -1,0 +1,132 @@
+{
+  "version": "0.9.0",
+  "signals": {
+    "required": ["HR", "RR", "SpO2", "PI", "SignalTrust"],
+    "optional": ["BFI", "tau_us", "Reperfusion90_s", "RhythmFlag", "MotionFlag", "AmbientLevel", "ColdSkinFlag", "Site"],
+    "updateWindow_s": 5,
+    "trendWindow_s": 30
+  },
+  "thresholds": {
+    "adult": {
+      "SpO2": {
+        "immediate_lt": 90,
+        "borderline_range": [90, 93]
+      },
+      "RR": {
+        "immediate_low_le": 8,
+        "immediate_high_ge": 30,
+        "borderline_range": [22, 29],
+        "sustain_s": 20
+      },
+      "HR": {
+        "tachy_ge": 120,
+        "brady_le": 50
+      },
+      "PI": {
+        "veryLow_lt": 0.5,
+        "low_le": 1.5
+      },
+      "BFI": {
+        "useTau": true,
+        "tau_immediate_gt_us": 120,
+        "tau_borderline_range_us": [80, 120],
+        "relDrop_borderline_pct": 10,
+        "relDrop_immediate_pct": 40
+      },
+      "Reperfusion90_s": {
+        "immediate_gt": 5.0,
+        "borderline_range": [3.0, 5.0]
+      },
+      "SignalTrust": {
+        "unreliable_lt": 50,
+        "good_ge": 70
+      },
+      "AssessTimeout_s": 30
+    }
+  },
+  "logic": {
+    "priorityOrder": ["Immediate", "Delayed", "Minor", "Assess"],
+    "hysteresis": {
+      "minPersist_s": 8,
+      "reclassCooldown_s": 10
+    },
+    "qualityGating": {
+      "ifUnreliableFor_s": 10,
+      "action": "ShowAssessAndCoach",
+      "coachPrompts": [
+        "Re-seat clip",
+        "Warm site or switch to earlobe",
+        "Reduce motion",
+        "Shade from sunlight"
+      ]
+    },
+    "rules": [
+      {
+        "id": "RED_RESP",
+        "class": "Immediate",
+        "when": "(RR >= RR.immediate_high_ge && sustain >= RR.sustain_s) || (RR <= RR.immediate_low_le && sustain >= RR.sustain_s)",
+        "reasons": ["RR {RR}"]
+      },
+      {
+        "id": "RED_SPO2",
+        "class": "Immediate",
+        "when": "SpO2 < SpO2.immediate_lt",
+        "reasons": ["SpO2 {SpO2}%"]
+      },
+      {
+        "id": "RED_BFI_PI",
+        "class": "Immediate",
+        "when": "(tau_us > BFI.tau_immediate_gt_us || relBFIDrop_pct >= BFI.relDrop_immediate_pct) && (HR >= HR.tachy_ge || PI < PI.veryLow_lt)",
+        "reasons": ["BFI low", "HR {HR}", "PI {PI}%"]
+      },
+      {
+        "id": "RED_REPERF",
+        "class": "Immediate",
+        "when": "Reperfusion90_s > Reperfusion90_s.immediate_gt && (HR >= HR.tachy_ge || SpO2 in SpO2.borderline_range)",
+        "reasons": ["Reperfusion {Reperfusion90_s}s", "HR {HR}", "SpO2 {SpO2}%"]
+      },
+      {
+        "id": "RED_RHYTHM_INSTAB",
+        "class": "Immediate",
+        "when": "RhythmFlag == 'irregular' && (PI < PI.veryLow_lt || tau_us > BFI.tau_immediate_gt_us)",
+        "reasons": ["Irregular rhythm", "Low PI/BFI"]
+      },
+      {
+        "id": "YEL_RESP_SPO2",
+        "class": "Delayed",
+        "when": "RR in RR.borderline_range || SpO2 in SpO2.borderline_range",
+        "reasons": ["RR {RR}", "SpO2 {SpO2}%"]
+      },
+      {
+        "id": "YEL_PERFUSION",
+        "class": "Delayed",
+        "when": "(PI <= PI.low_le) || (tau_us in BFI.tau_borderline_range_us) || (relBFIDrop_pct >= BFI.relDrop_borderline_pct && relBFIDrop_pct < BFI.relDrop_immediate_pct) || (Reperfusion90_s in Reperfusion90_s.borderline_range)",
+        "reasons": ["PI {PI}%", "BFI borderline", "Reperfusion {Reperfusion90_s}s"]
+      },
+      {
+        "id": "YEL_RHYTHM_STABLE",
+        "class": "Delayed",
+        "when": "RhythmFlag == 'irregular' && (PI >= PI.low_le) && (tau_us <= BFI.tau_immediate_gt_us)",
+        "reasons": ["Irregular rhythm; hemodynamics OK"]
+      },
+      {
+        "id": "GRN_ALL_OK",
+        "class": "Minor",
+        "when": "RR >= 12 && RR <= 21 && SpO2 >= 94 && PI >= 1.5 && (tau_us <= 80 || relBFIDrop_pct < 10 || BFI_unavailable == true) && RhythmFlag != 'irregular' && SignalTrust >= SignalTrust.good_ge",
+        "reasons": ["Stable vitals"]
+      },
+      {
+        "id": "ASSESS_FALLBACK",
+        "class": "Assess",
+        "when": "SignalTrust < SignalTrust.unreliable_lt",
+        "reasons": ["Signal unreliable"]
+      },
+      {
+        "id": "ASSESS_TIMEOUT",
+        "class": "Assess",
+        "when": "NoReliableReadFor_s >= AssessTimeout_s",
+        "reasons": ["No reliable read"]
+      }
+    ]
+  }
+}
