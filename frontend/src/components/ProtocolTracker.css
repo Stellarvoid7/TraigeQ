@@ -1,0 +1,47 @@
+/* frontend/src/components/ProtocolTracker.css */
+
+.protocol-tracker {
+  background-color: #111;
+  padding: 10px;
+  margin: 16px;
+  border-radius: 8px;
+  border: 1px solid #444;
+  color: #eee;
+}
+.protocol-info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+.protocol-step {
+  font-weight: bold;
+  color: #00c853;
+}
+.protocol-progress-bar {
+  width: 100%;
+  height: 6px;
+  background-color: #444;
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+.protocol-progress-fill {
+  height: 100%;
+  background-color: #00c853;
+  transition: width 0.5s ease-in-out;
+}
+.softkeys {
+  display: flex;
+  justify-content: space-around;
+}
+.softkey {
+  background: none;
+  border: 1px solid #888;
+  color: #ccc;
+  padding: 5px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.softkey:hover {
+  background-color: #333;
+}

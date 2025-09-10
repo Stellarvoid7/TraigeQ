@@ -1,0 +1,70 @@
+/* frontend/src/components/AssessmentStepper.css */
+.stepper-container {
+  padding: 16px;
+  margin: 16px;
+  background-color: rgba(0, 0, 0, 0.2);
+  border-top: 1px solid #444;
+  border-bottom: 1px solid #444;
+}
+.steps-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+.step-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  flex-grow: 1;
+}
+.step-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #333;
+  border: 2px solid #555;
+  color: #888;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  transition: all 0.4s ease;
+}
+.step-circle.active {
+  background-color: #007bff;
+  border-color: #00c853;
+  color: white;
+  transform: scale(1.1);
+}
+.step-circle.complete {
+  background-color: #00c853;
+  border-color: #00c853;
+  color: white;
+}
+.step-message {
+  color: #eee;
+  font-weight: bold;
+  margin-top: 8px;
+  height: 20px; /* Reserve space to prevent layout shift */
+  text-align: center;
+}
+.softkeys-stepper {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+.softkey-stepper {
+  background: none;
+  border: 1px solid #888;
+  color: #ccc;
+  padding: 8px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.softkey-stepper:disabled {
+  color: #555;
+  border-color: #555;
+  cursor: not-allowed;
+}

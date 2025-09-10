@@ -1,35 +1,62 @@
-/* frontend/src/components/VitalsDisplay.css */
+/* frontend/src/components/VitalsDisplay.css (Version 2.1) */
+
+/* 1. Define the pulse animation */
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
 
 .vitals-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* Creates a 3-column grid */
-  gap: 16px; /* Space between the cards */
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
   padding: 16px;
 }
 
 .vital-card {
-  background-color: #2a2a2e; /* Dark card background */
+  background-color: #2a2a2e;
   border-radius: 8px;
   padding: 16px;
   text-align: center;
   border: 1px solid #444;
+  transition: all 0.3s ease;
 }
 
 .vital-label {
   font-size: 1em;
   color: #aaa;
   margin-bottom: 8px;
-  /* New styles for icon alignment */
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px; /* Space between icon and text */
+  gap: 8px;
 }
 
 .vital-value {
   font-size: 2.2em;
   font-weight: bold;
-  color: #fff;
+  color: #fff; /* Default color */
+  transition: color 0.3s ease;
+}
+
+/* 2. New color for normal SpO2 */
+.vital-value--normal-spo2 {
+  color: #29B6F6; /* Light Blue/Cyan */
+}
+
+.vital-value--warning {
+  color: #FBC02D; /* Bright Yellow */
+}
+
+.vital-value--critical {
+  color: #D32F2F; /* Bright Red */
 }
 
 .vital-unit {
@@ -40,7 +67,7 @@
 }
 
 .loading-text {
-    padding: 40px;
-    font-size: 1.2em;
-    color: #888;
+  padding: 40px;
+  font-size: 1.2em;
+  color: #888;
 }

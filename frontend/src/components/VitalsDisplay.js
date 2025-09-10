@@ -1,47 +1,69 @@
-// frontend/src/components/VitalsDisplay.js
+// frontend/src/components/VitalsDisplay.js (Version 2.2)
 
 import React from 'react';
 import './VitalsDisplay.css';
+// ... (keep all the icon imports)
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import AirIcon from '@mui/icons-material/Air';
+import OpacityIcon from '@mui/icons-material/Opacity';
+import SpeedIcon from '@mui/icons-material/Speed';
+import ScienceIcon from '@mui/icons-material/Science';
+import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
 
-// 1. Import the icons we need from Material-UI
-import FavoriteIcon from '@mui/icons-material/Favorite'; // Heart for HR
-import AirIcon from '@mui/icons-material/Air'; // Wind for RR
-import OpacityIcon from '@mui/icons-material/Opacity'; // Water drop for SpO2
-import SpeedIcon from '@mui/icons-material/Speed'; // Speedometer for PI
-import ScienceIcon from '@mui/icons-material/Science'; // Beaker for BFI
-import VerifiedUserIcon from '@mui/icons-material/VerifiedUser'; // Shield for Trust
 
-// A small component for displaying a single vital sign
-const Vital = ({ label, value, unit, icon }) => (
-  <div className="vital-card">
+const Vital = ({ label, value, unit, icon, status, animationStyle, onCardClick }) => (
+  <div className={`vital-card vital-card--${status}`} onClick={() => onCardClick(label)}>
     <div className="vital-label">
-      {/* 2. Add the icon next to the label */}
-      {icon}
+      <span style={animationStyle}>{icon}</span>
       {label}
     </div>
-    <div className="vital-value">
+    <div className={`vital-value vital-value--${status}`}>
       {value}
       <span className="vital-unit"> {unit}</span>
     </div>
   </div>
 );
 
-// The main component that arranges all the vitals in a grid
-const VitalsDisplay = ({ vitals }) => {
-  // If vitals data is not available yet, show a loading message
+const VitalsDisplay = ({ vitals, onCardClick }) => {
+  // ... (keep the `if (!vitals)` block and the `getVitalStatus` function exactly the same)
   if (!vitals) {
     return <div className="loading-text">Connecting to device...</div>;
   }
+  const getVitalStatus = (label, value) => {
+    switch (label) {
+      case 'HR':
+        if (value >= 120) return 'critical';
+        if (value < 50) return 'warning';
+        return 'normal';
+      case 'SpO2':
+        if (value < 90) return 'critical';
+        if (value <= 93) return 'warning';
+        return 'normal-spo2';
+      case 'PI':
+        return value < 0.5 ? 'critical' : 'normal';
+      case 'RR':
+        return (value >= 30 || value < 8) ? 'critical' : 'normal';
+      case 'BFI':
+         return value > 120 ? 'critical' : 'normal';
+      default:
+        return 'normal';
+    }
+  };
+
+  const heartAnimation = {
+    animationDuration: vitals.HR > 0 ? `${60 / vitals.HR}s` : 'none',
+    animationName: 'pulse',
+    animationIterationCount: 'infinite',
+  };
 
   return (
     <div className="vitals-grid">
-      {/* 3. Pass the correct icon component to each Vital */}
-      <Vital label="HR" value={vitals.HR} unit="bpm" icon={<FavoriteIcon fontSize="inherit" />} />
-      <Vital label="SpO2" value={vitals.SpO2} unit="%" icon={<OpacityIcon fontSize="inherit" />} />
-      <Vital label="PI" value={vitals.PI} unit="%" icon={<SpeedIcon fontSize="inherit" />} />
-      <Vital label="RR" value={vitals.RR} unit="bpm" icon={<AirIcon fontSize="inherit" />} />
-      <Vital label="BFI" value={vitals.tau_us} unit="μs (τc)" icon={<ScienceIcon fontSize="inherit" />} />
-      <Vital label="Signal Trust" value={vitals.SignalTrust} unit="%" icon={<VerifiedUserIcon fontSize="inherit" />} />
+      <Vital label="HR" value={vitals.HR} unit="bpm" icon={<FavoriteIcon fontSize="inherit" />} status={getVitalStatus('HR', vitals.HR)} animationStyle={heartAnimation} onCardClick={onCardClick} />
+      <Vital label="SpO2" value={vitals.SpO2} unit="%" icon={<OpacityIcon fontSize="inherit" />} status={getVitalStatus('SpO2', vitals.SpO2)} onCardClick={onCardClick} />
+      <Vital label="PI" value={vitals.PI} unit="%" icon={<SpeedIcon fontSize="inherit" />} status={getVitalStatus('PI', vitals.PI)} onCardClick={onCardClick} />
+      <Vital label="RR" value={vitals.RR} unit="bpm" icon={<AirIcon fontSize="inherit" />} status={getVitalStatus('RR', vitals.RR)} onCardClick={onCardClick} />
+      <Vital label="BFI" value={vitals.tau_us} unit="μs (τc)" icon={<ScienceIcon fontSize="inherit" />} status={getVitalStatus('BFI', vitals.tau_us)} onCardClick={onCardClick} />
+      <Vital label="Signal Trust" value={vitals.SignalTrust} unit="%" icon={<VerifiedUserIcon fontSize="inherit" />} status={getVitalStatus('SignalTrust', vitals.SignalTrust)} onCardClick={onCardClick} />
     </div>
   );
 };

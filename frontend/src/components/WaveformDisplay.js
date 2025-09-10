@@ -46,6 +46,9 @@ const WaveformDisplay = ({ data }) => {
       },
     },
     plugins: {
+      legend: {
+        display: false,
+      },
       tooltip: {
         enabled: false, // Disable tooltips on hover
       },

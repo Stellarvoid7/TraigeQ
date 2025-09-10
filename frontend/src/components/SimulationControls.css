@@ -1,4 +1,4 @@
-/* frontend/src/components/SimulationControls.css */
+/* frontend/src/components/SimulationControls.css (Version 2.0) */
 
 .sim-controls {
   background-color: #222;
@@ -12,12 +12,12 @@
 .sim-label {
   font-size: 0.8em;
   color: #aaa;
-  margin: 0 10px 10px 0;
+  margin: 0 10px 0 0;
   display: inline-block;
+  vertical-align: middle;
 }
 
 .sim-controls button {
-  background-color: #007bff;
   color: white;
   border: none;
   padding: 8px 16px;
@@ -25,8 +25,14 @@
   border-radius: 5px;
   cursor: pointer;
   font-weight: bold;
+  transition: all 0.2s ease;
 }
 
 .sim-controls button:hover {
-  background-color: #0056b3;
+  opacity: 0.8;
 }
+
+.sim-button--minor { background-color: #388E3C; } /* Green */
+.sim-button--delayed { background-color: #FBC02D; } /* Yellow */
+.sim-button--immediate { background-color: #D32F2F; } /* Red */
+.sim-button--assess { background-color: #616161; } /* Gray */

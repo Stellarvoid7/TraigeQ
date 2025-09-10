@@ -14,3 +14,20 @@ body {
 .App-header {
   padding: 20px;
 }
+
+/* Add to bottom of App.css */
+
+.start-assessment-button {
+  padding: 12px 24px;
+  font-size: 1.2em;
+  font-weight: bold;
+  color: white;
+  background-color: #007bff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin: 20px;
+}
+.start-assessment-button:hover {
+  background-color: #0056b3;
+}

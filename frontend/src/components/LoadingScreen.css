@@ -1,0 +1,51 @@
+/* frontend/src/components/LoadingScreen.css */
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #121212;
+  color: white;
+  text-align: center;
+}
+
+.loading-content {
+  animation: fadeIn 1.5s ease-in-out;
+}
+
+.loading-title {
+  font-size: 4em;
+  margin: 0;
+  letter-spacing: 2px;
+}
+
+.loading-subtitle {
+  font-size: 1.2em;
+  color: #aaa;
+  margin-top: 10px;
+}
+
+.begin-button {
+  margin-top: 40px;
+  padding: 12px 30px;
+  font-size: 1.2em;
+  font-weight: bold;
+  color: white;
+  background-color: #007bff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.begin-button:hover {
+  background-color: #0056b3;
+  transform: scale(1.05);
+}
+
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
